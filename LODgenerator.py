@@ -19,14 +19,16 @@ class UI_Panel(bpy.types.Panel): # case sensitive - not panel but Panel
         _data = context.scene.my_tool    #grabs the stuff inside of my_tool
         _layout.prop(_data, "targetSelection")   # draws the box 
         
-        _layout.operator("object.duplicator", text="1") # simple buttonm, for exmaple _layout.operator("mesh.primitive_cube_add") would create a cube 
-        _layout.operator("object.duplicator", text="2") # CASE SENSIIVE
-        _layout.operator("object.duplicator", text="3") # the object.duplicator here will exec whatever is in the class with the ID duplicator 
+        _layout.operator("object.duplicator", text="25%") # simple buttonm, for exmaple _layout.operator("mesh.primitive_cube_add") would create a cube 
+        _layout.operator("object.duplicator", text="50%") # CASE SENSIIVE
+        _layout.operator("object.duplicator", text="75%") # the object.duplicator here will exec whatever is in the class with the ID duplicator 
         
         
 class DuplicateObject(bpy.types.Operator):
     bl_idname = "object.duplicator"
     bl_label = "LOD_Duplicator" 
+    
+    decimate_amount = bpy.props.FloatProperty(name="Amount", default=1.0) # huge line of code just to create a float for the decimate 
     
     def execute(self, context):
         
@@ -36,12 +38,11 @@ class DuplicateObject(bpy.types.Operator):
             
             _new_obj = _obj.copy()
             _new_obj.data = _obj.data.copy()
-            context.collection.objects.link(_new_obj)
+            context.collection.objects.link(_new_obj) # grabs the new object and places it in the 3D Scene
             
             
             return {'FINISHED'} 
-        
-        
+                
 class SelectionBox(bpy.types.PropertyGroup):  
         targetSelection: bpy.props.PointerProperty(   # targetSelection -- bpy.props.PointerProperty = the water drop thing to select the object 
         name="Select Object for an LOD",    # display text in that box 
