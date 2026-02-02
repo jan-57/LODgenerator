@@ -19,7 +19,27 @@ class UI_Panel(bpy.types.Panel): # case sensitive - not panel but Panel
         _data = context.scene.my_tool    #grabs the stuff inside of my_tool
         _layout.prop(_data, "targetSelection")   # draws the box 
         
+        _layout.operator("object.duplicator", text="1") # simple buttonm, for exmaple _layout.operator("mesh.primitive_cube_add") would create a cube 
+        _layout.operator("object.duplicator", text="2") # CASE SENSIIVE
+        _layout.operator("object.duplicator", text="3") # the object.duplicator here will exec whatever is in the class with the ID duplicator 
         
+        
+class DuplicateObject(bpy.types.Operator):
+    bl_idname = "object.duplicator"
+    bl_label = "LOD_Duplicator" 
+    
+    def execute(self, context):
+        
+        _obj = context.scene.my_tool.targetSelection  # grabs the selection from the my_tool 
+        
+        if _obj is not None:  # just to make sure the object is not null 
+            
+            _new_obj = _obj.copy()
+            _new_obj.data = _obj.data.copy()
+            context.collection.objects.link(_new_obj)
+            
+            
+            return {'FINISHED'} 
         
         
 class SelectionBox(bpy.types.PropertyGroup):  
@@ -31,11 +51,13 @@ class SelectionBox(bpy.types.PropertyGroup):
 def register():                            # register the classes / We got to register every class 
     bpy.utils.register_class(UI_Panel)
     bpy.utils.register_class(SelectionBox)
+    bpy.utils.register_class(DuplicateObject)
     bpy.types.Scene.my_tool = bpy.props.PointerProperty(type=SelectionBox)   # saves the picked object 
     
 def unregister():                          # unregister the class / reverse of registering text  
     bpy.utils.unregister_class(UI_Panel)
     bpy.utils.unregister_class(SelectionBox)
+    bpy.utils.unregister_class(DuplicateObject)
     del bpy.types.Scene.my_too
     
 if __name__ == "__main__":                 # exec the script
