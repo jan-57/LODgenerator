@@ -1,1 +1,1 @@
-Simple LOD Generator for an personal .py exercice 
+2nd Python Exercice - LOD Generator
