@@ -19,17 +19,18 @@ class UI_Panel(bpy.types.Panel): # case sensitive - not panel but Panel
         _data = context.scene.my_tool    #grabs the stuff inside of my_tool
         _layout.prop(_data, "targetSelection")   # draws the box 
         
-        _layout.operator("object.duplicator", text="25%") # simple buttonm, for exmaple _layout.operator("mesh.primitive_cube_add") would create a cube 
-        _layout.operator("object.duplicator", text="50%") # CASE SENSIIVE
-        _layout.operator("object.duplicator", text="75%") # the object.duplicator here will exec whatever is in the class with the ID duplicator 
-        
+        dec25 = _layout.operator("object.duplicator", text="25%") # simple buttonm, for exmaple _layout.operator("mesh.primitive_cube_add") would create a cube 
+        dec25.dec_amount = 0.25
+        dec50 = _layout.operator("object.duplicator", text="50%")# the dec_amount its the float from the dec_amount. the dot after it associated the button with the amount, so if you press a different button you also get a different amount 
+        dec50.dec_amount = 0.5
+        dec75 = _layout.operator("object.duplicator", text="75%") # the object.duplicator here will exec whatever is in the class with the ID duplicator 
+        dec75.dec_amount = 0.75
         
 class DuplicateObject(bpy.types.Operator):
     bl_idname = "object.duplicator"
     bl_label = "LOD_Duplicator" 
     
-    decimate_amount = bpy.props.FloatProperty(name="Amount", default=1.0) # huge line of code just to create a float for the decimate 
-    
+    dec_amount: bpy.props.FloatProperty(default=1.0) # huge line of code just to create a float for the decimate 
     def execute(self, context):
         
         _obj = context.scene.my_tool.targetSelection  # grabs the selection from the my_tool 
@@ -39,10 +40,15 @@ class DuplicateObject(bpy.types.Operator):
             _new_obj = _obj.copy()
             _new_obj.data = _obj.data.copy()
             context.collection.objects.link(_new_obj) # grabs the new object and places it in the 3D Scene
+            
+            
+            decimate_modifier = _new_obj.modifiers.new(name="Decimate", type='DECIMATE')
+            decimate_modifier.ratio = self.dec_amount
+            
             return {'FINISHED'} 
         else:
             return {'CANCELLED'} # if you click on the button without anything, cancel 
-                
+        
 class SelectionBox(bpy.types.PropertyGroup):  
         targetSelection: bpy.props.PointerProperty(   # targetSelection -- bpy.props.PointerProperty = the water drop thing to select the object 
         name="Select Object for an LOD",    # display text in that box 
