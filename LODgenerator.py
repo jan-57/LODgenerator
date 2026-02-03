@@ -39,9 +39,9 @@ class DuplicateObject(bpy.types.Operator):
             _new_obj = _obj.copy()
             _new_obj.data = _obj.data.copy()
             context.collection.objects.link(_new_obj) # grabs the new object and places it in the 3D Scene
-            
-            
             return {'FINISHED'} 
+        else:
+            return {'CANCELLED'} # if you click on the button without anything, cancel 
                 
 class SelectionBox(bpy.types.PropertyGroup):  
         targetSelection: bpy.props.PointerProperty(   # targetSelection -- bpy.props.PointerProperty = the water drop thing to select the object 
