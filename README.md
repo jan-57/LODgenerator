@@ -1,6 +1,8 @@
 # LOD Generator 
 
- 2nd Python Exercice - Using
+ LOD Generator for Blender made with python
+
+ Softwares Used:
 
     Blender
        - Decimate Modifier ( mainly ) 
