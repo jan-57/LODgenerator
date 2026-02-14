@@ -7,6 +7,8 @@
     Blender
        - Decimate Modifier ( mainly ) 
        - Other blender things ( buttons, duplicating obj, etc... ) 
+    Pycharm 
+       - coding 
     
 
 ## Goals: 
